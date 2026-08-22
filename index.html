@@ -72,7 +72,9 @@ orderForm.onsubmit=e=>{
     size:document.getElementById('productSizeHidden').value,
     qty:document.getElementById('qtyHidden').value,
     delivery:document.getElementById('deliveryHidden').value,
-    total:`${totalVal} promotion`
+    total:totalVal,
+    note:`المبلغ الإجمالي (مع التوصيل): ${Number(totalVal).toLocaleString('fr-DZ')} دج`,
+    source:'promotion'
   };
   fetch(SHEET_WEBHOOK_URL,{method:'POST',body:JSON.stringify(sheetData)})
   .then(()=>{
