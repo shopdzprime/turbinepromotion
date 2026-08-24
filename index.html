@@ -50,7 +50,8 @@ function renderSizePicker(){document.getElementById('productList').innerHTML=Obj
 function changeItemQty(s,n){qtyMap[s]=Math.max(0,qtyMap[s]+n);document.getElementById(`pqty-${s}`).textContent=qtyMap[s];document.getElementById(`pitem-${s}`).classList.toggle('selected',qtyMap[s]>0);update()}
 renderSizePicker();const prices={'أدرار':1400,'الشلف':800,'الأغواط':950,'أم البواقي':800,'باتنة':800,'بجاية':500,'بسكرة':950,'بشار':1100,'البليدة':750,'البويرة':700,'تمنراست':1600,'تبسة':800,'تلمسان':900,'تيارت':800,'تيزي وزو':650,'الجزائر':600,'الجلفة':950,'جيجل':700,'سطيف':750,'سعيدة':800,'سكيكدة':750,'سيدي بلعباس':750,'عنابة':800,'قالمة':800,'قسنطينة':750,'المدية':750,'مستغانم':750,'المسيلة':850,'معسكر':750,'ورقلة':1000,'وهران':700,'البيض':1050,'برج بوعريريج':750,'بومرداس':750,'الطارف':850,'تيسمسيلت':800,'الوادي':1000,'خنشلة':800,'سوق أهراس':800,'تيبازة':750,'ميلة':750,'عين الدفلى':750,'النعامة':1100,'عين تموشنت':750,'غرداية':1000,'غليزان':750,'تيميمون':1400,'برج باجي مختار':1600,'أولاد جلال':950,'بني عباس':1200,'عين صالح':1600,'عين قزام':1600,'توقرت':1000,'المغير':1000,'المنيعة':1000};
 const img=document.getElementById('mainImage'),dots=document.getElementById('dots');function render(){img.src=images[slide];dots.innerHTML=images.map((_,i)=>`<button class="dot ${i===slide?'active':''}" onclick="go(${i})" aria-label="الصورة ${i+1}"></button>`).join('')}function go(i){slide=i;render()}function move(n){slide=(slide+n+images.length)%images.length;render()}render();
-const select=document.getElementById('wilaya');select.innerHTML=Object.keys(prices).map(n=>`<option>${n}</option>`).join('');function update(){const p=prices[select.value]||600,d=delivery==='home'?p:Math.max(450,p-130);let totalQty=0,productsTotal=0,itemsHtml='',sizeParts=[];Object.keys(qtyMap).forEach(s=>{const q=qtyMap[s];if(q>0){const np=productPrices[s];totalQty+=q;productsTotal+=np*q;sizeParts.push(`${s}mm x${q}`);itemsHtml+=`<div class="sumline"><span>${s} mm × ${q}</span><b>${(np*q).toLocaleString('fr-DZ')} دج</b></div>`}});document.getElementById('summaryItems').innerHTML=itemsHtml||'<div class="sumline"><span>لم تختر أي منتج بعد</span></div>';document.getElementById('where').textContent=select.value;document.getElementById('deliveryPrice').textContent=d.toLocaleString('fr-DZ')+' دج';document.getElementById('qtyHidden').value=totalQty;document.getElementById('productSizeHidden').value=sizeParts.join(', ');const totalVal=totalQty>0?productsTotal+d:0;document.getElementById('total').textContent=totalVal.toLocaleString('fr-DZ')+' دج';document.getElementById('totalHidden').value=totalVal}function setDelivery(v){delivery=v;document.getElementById('home').classList.toggle('active',v==='home');document.getElementById('desk').classList.toggle('active',v==='desk');document.getElementById('deliveryHidden').value=(v==='home')?'توصيل للمنزل':'توصيل للمكتب';update()}select.onchange=update;update();
+const deskPrices={'أدرار':970,'الشلف':520,'الأغواط':620,'أم البواقي':520,'باتنة':520,'بجاية':450,'بسكرة':620,'بشار':720,'البليدة':470,'البويرة':520,'تمنراست':1120,'تبسة':520,'تلمسان':570,'تيارت':520,'تيزي وزو':520,'الجزائر':470,'الجلفة':620,'جيجل':520,'سطيف':520,'سعيدة':570,'سكيكدة':520,'سيدي بلعباس':520,'عنابة':520,'قالمة':520,'قسنطينة':520,'المدية':520,'مستغانم':520,'المسيلة':570,'معسكر':520,'ورقلة':670,'وهران':520,'البيض':670,'برج بوعريريج':520,'بومرداس':520,'الطارف':520,'تيسمسيلت':520,'الوادي':670,'خنشلة':520,'سوق أهراس':520,'تيبازة':520,'ميلة':520,'عين الدفلى':520,'النعامة':670,'عين تموشنت':520,'غرداية':620,'غليزان':520,'تيميمون':970,'برج باجي مختار':1600,'أولاد جلال':620,'بني عباس':970,'عين صالح':1120,'عين قزام':1600,'توقرت':670,'المغير':1000,'المنيعة':670};
+const select=document.getElementById('wilaya');select.innerHTML=Object.keys(prices).map(n=>`<option>${n}</option>`).join('');function update(){const p=prices[select.value]||600,d=delivery==='home'?p:(deskPrices[select.value]!==undefined?deskPrices[select.value]:p);let totalQty=0,productsTotal=0,itemsHtml='',sizeParts=[];Object.keys(qtyMap).forEach(s=>{const q=qtyMap[s];if(q>0){const np=productPrices[s];totalQty+=q;productsTotal+=np*q;sizeParts.push(`${s}mm x${q}`);itemsHtml+=`<div class="sumline"><span>${s} mm × ${q}</span><b>${(np*q).toLocaleString('fr-DZ')} دج</b></div>`}});document.getElementById('summaryItems').innerHTML=itemsHtml||'<div class="sumline"><span>لم تختر أي منتج بعد</span></div>';document.getElementById('where').textContent=select.value;document.getElementById('deliveryPrice').textContent=d.toLocaleString('fr-DZ')+' دج';document.getElementById('qtyHidden').value=totalQty;document.getElementById('productSizeHidden').value=sizeParts.join(', ');const totalVal=totalQty>0?productsTotal+d:0;document.getElementById('total').textContent=totalVal.toLocaleString('fr-DZ')+' دج';document.getElementById('totalHidden').value=totalVal}function setDelivery(v){delivery=v;document.getElementById('home').classList.toggle('active',v==='home');document.getElementById('desk').classList.toggle('active',v==='desk');document.getElementById('deliveryHidden').value=(v==='home')?'توصيل للمنزل':'توصيل للمكتب';update()}select.onchange=update;update();
 const data=[['ما هو القياس المناسب لمساحتي؟','<div class="diameter-answer"><p class="diameter-intro">كل مقاس مخصص لمساحة معينة. اختر المقاس المناسب لمساحة مكانك مباشرة:</p><div class="diameter-circles"><div class="diameter-size"><span class="diameter-circle"></span><span>315mm</span></div><div class="diameter-size"><span class="diameter-circle"></span><span>250mm</span></div><div class="diameter-size"><span class="diameter-circle"></span><span>200mm</span></div><div class="diameter-size"><span class="diameter-circle"></span><span>150mm</span></div><div class="diameter-size"><span class="diameter-circle"></span><span>125mm</span></div><div class="diameter-size"><span class="diameter-circle"></span><span>100mm</span></div></div><div class="diameter-rows"><div class="diameter-row">100mm — تناسب مساحة 8-16 م² (غرفة، مكتب صغير، حمام)</div><div class="diameter-row">125mm — تناسب مساحة 10-20 م² (محل صغير، كامبنتريا صغيرة، شقة)</div><div class="diameter-row">150mm — تناسب مساحة 18-36 م² (مقهى، بيتزا صغيرة، مكتب متوسط)</div><div class="diameter-row">200mm — تناسب مساحة 34-76 م² (مطعم متوسط، ورشة، فرن بيتزا)</div><div class="diameter-row">250mm — تناسب مساحة 55-130 م² (ورشة كبيرة، مطعم كبير، مساحة صناعية)</div><div class="diameter-row">315mm — تناسب مساحة 90-200 م² (مستودع، صالة رياضية كبيرة، مطعم كبير جداً)</div></div></div>'],['هل التركيب سهل؟','• يأتي المنتج جاهزًا للتركيب.<br>• التعليمات واضحة وبسيطة.<br>• يمكن الاستعانة بفني عند الحاجة.'],['هل التوربين مزعج أثناء التشغيل؟','• أهدأ من التوربينات المصنوعة من الحديد.<br>• اهتزاز وضجيج أقل أثناء التشغيل.<br>• أداء أفضل بكثير مع تهوية فعالة ومستقرة.'],['هل توجد ضمانات؟','• ضمان لمدة 12 شهرًا على المنتج.<br>• معاينة المنتج قبل الدفع متاحة.'],['هل يمكن المعاينة قبل الدفع؟','• نعم، يمكنك معاينة المنتج قبل الدفع.<br>• الدفع يكون عند الاستلام بعد التأكد من الطلب.']];document.getElementById('faqs').innerHTML=data.map((x,i)=>`<div class="faqitem ${i===0?'open':''}"><button class="faqq" onclick="this.parentElement.classList.toggle('open')"><span>${x[0]}</span><span>◀</span></button><div class="faqa">${x[1]}</div></div>`).join('');const orderForm=document.getElementById('orderForm');
 const submitBtn=document.querySelector('.submit');
 const submitDefaultText=submitBtn.textContent;
@@ -70,20 +71,33 @@ orderForm.onsubmit=e=>{
     wilaya:select.value,
     address:orderForm.address_details.value,
     size:document.getElementById('productSizeHidden').value,
-    qty:document.getElementById('qtyHidden').value,
+    qty:`${document.getElementById('qtyHidden').value} مؤكدة`,
     delivery:document.getElementById('deliveryHidden').value,
     total:totalVal,
     note:`المبلغ الإجمالي (مع التوصيل): ${Number(totalVal).toLocaleString('fr-DZ')} دج`,
-    source:'promotion'
+    source:'promotion',
+    status:'مكتمل'
   };
   fetch(SHEET_WEBHOOK_URL,{method:'POST',body:JSON.stringify(sheetData)})
   .then(()=>{
     clearInterval(waitInterval);
+    orderCompleted=true;
     Array.from(orderForm.children).forEach(el=>{if(el.id!=='success')el.style.display='none'});
     const s=document.getElementById('success');
     s.hidden=false;
     s.scrollIntoView({behavior:'smooth',block:'center'});
-    if(window.fbq)fbq('track','Lead',{content_name:'توربين تهوية وتبريد',delivery_type:delivery});
+    if(window.fbq){
+      fbq('track','Lead',{content_name:'توربين تهوية وتبريد',delivery_type:delivery});
+      fbq('track','Purchase',{
+        value:Number(totalVal)||0,
+        currency:'DZD',
+        content_name:'توربين تهوية وتبريد',
+        content_type:'product',
+        contents:document.getElementById('productSizeHidden').value.split(',').map(s=>s.trim()).filter(Boolean).map(s=>({id:s,quantity:1})),
+        num_items:Number(document.getElementById('qtyHidden').value)||1,
+        delivery_type:delivery
+      });
+    }
   })
   .catch(()=>{
     clearInterval(waitInterval);
@@ -91,6 +105,75 @@ orderForm.onsubmit=e=>{
     alert('حدث خطأ أثناء إرسال الطلب. يرجى المحاولة مجدداً أو التواصل عبر واتساب.');
   });
 };
+
+// ===== إرسال بيانات جزئية (Lead) قبل اكتمال الطلب، خاصة عند إدخال رقم هاتف صحيح =====
+// نرسل "لقطة" محدّثة لكل الحقول المتوفرة حتى الآن (الاسم، الهاتف، الولاية، البلدية والعنوان، المنتج)
+// وليس فقط لحظة كتابة الهاتف، حتى لا تفوتنا بقية البيانات التي يعبّئها الزبون لاحقاً.
+let orderCompleted=false;
+let lastPartialFingerprint='';
+let partialDebounceTimer=null;
+const phonePattern=/^0[5-7][0-9]{8}$/;
+
+function buildPartialData(statusLabel){
+  const t=document.getElementById('totalHidden').value||'0';
+  return {
+    name:orderForm.full_name.value||'',
+    phone:orderForm.phone.value||'',
+    wilaya:select.value||'',
+    address:orderForm.address_details.value||'',
+    size:document.getElementById('productSizeHidden').value||'',
+    qty:document.getElementById('qtyHidden').value||'0',
+    delivery:document.getElementById('deliveryHidden').value||'',
+    total:t,
+    note:`المبلغ الإجمالي (مع التوصيل): ${Number(t).toLocaleString('fr-DZ')} دج`,
+    source:'promotion',
+    status:statusLabel
+  };
+}
+
+function sendPartialLeadNow(){
+  if(orderCompleted)return; // الطلب اكتمل فعلاً، لا داعي لإرسال جزئي بعد الآن
+  const phoneVal=orderForm.phone.value.trim();
+  if(!phonePattern.test(phoneVal))return; // نرسل فقط عند وجود رقم هاتف صالح الصيغة
+  const data=buildPartialData('غير مكتمل');
+  const fingerprint=JSON.stringify(data);
+  if(fingerprint===lastPartialFingerprint)return; // لا تُعِد إرسال نفس البيانات بالضبط
+  lastPartialFingerprint=fingerprint;
+  try{
+    fetch(SHEET_WEBHOOK_URL,{method:'POST',body:JSON.stringify(data)}).catch(()=>{});
+  }catch(err){/* تجاهل أي خطأ حتى لا يظهر للمستخدم */}
+}
+
+// تأجيل بسيط (debounce) حتى لا نرسل طلباً مع كل نقرة أو حرف يكتبه الزبون
+function scheduleSendPartialLead(){
+  clearTimeout(partialDebounceTimer);
+  partialDebounceTimer=setTimeout(sendPartialLeadNow,900);
+}
+
+// نراقب كل الحقول المهمة: عند مغادرة الهاتف/العنوان، عند تغيير الولاية، وعند اختيار/تعديل المنتج والكمية
+orderForm.phone.addEventListener('blur',scheduleSendPartialLead);
+orderForm.address_details.addEventListener('blur',scheduleSendPartialLead);
+orderForm.full_name.addEventListener('blur',scheduleSendPartialLead);
+select.addEventListener('change',scheduleSendPartialLead);
+document.getElementById('productList').addEventListener('click',scheduleSendPartialLead);
+
+// عند مغادرة الصفحة أو تصغيرها والزبون لم يكمل الطلب بعد، نرسل نسخة احتياطية فورية (بدون تأجيل) عبر sendBeacon
+function sendPartialLeadOnLeave(){
+  if(orderCompleted)return;
+  const phoneVal=orderForm.phone.value.trim();
+  if(!phonePattern.test(phoneVal))return;
+  const data=buildPartialData('غير مكتمل');
+  const fingerprint=JSON.stringify(data);
+  if(fingerprint===lastPartialFingerprint)return;
+  lastPartialFingerprint=fingerprint;
+  try{
+    if(navigator.sendBeacon){
+      navigator.sendBeacon(SHEET_WEBHOOK_URL,new Blob([JSON.stringify(data)],{type:'text/plain;charset=UTF-8'}));
+    }
+  }catch(err){/* تجاهل */}
+}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')sendPartialLeadOnLeave()});
+window.addEventListener('pagehide',sendPartialLeadOnLeave);
 </script>
 </body>
 </html>
